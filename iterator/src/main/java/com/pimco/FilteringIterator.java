@@ -1,6 +1,7 @@
 package com.pimco;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Created by valdch2 on 2/17/2017.
@@ -36,17 +37,15 @@ public class FilteringIterator implements Iterator {
 
     @Override
     public Object next() {
-        if (this.nextElement != null) {
-            Object next = this.nextElement;
-            this.nextElement = null;
-            return next;
+        if (this.nextElement == null) {
+            hasNext();
         }
-        Object next = this.myIterator.next();
-        if (this.myTest.test(next)) {
-            return next;
-        } else {
-            return next();
+        if (this.nextElement == null) {
+            throw new NoSuchElementException();
         }
+        Object next = this.nextElement;
+        this.nextElement = null;
+        return next;
     }
 
     @Override
